@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Vitamin-M</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caladea:wght@400;700&family=Carlito:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#eef3fa; --text:#1b3358; --muted:#3f5578; --accent:#e8a33d; --accent-ink:#1b3358; --title-accent:#9c6a1f;
+  --line:rgba(27,51,88,.18); --slide:#fff; --slide-ink:#1b3358; --credit:#9c6a1f; --bar:rgba(27,51,88,.14);
+  --serif:"Caladea",Cambria,Georgia,serif; --sans:"Carlito",Calibri,system-ui,sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){--bg:#1b3358;--text:#fff;--muted:#d7e3f4;--title-accent:#e8a33d;--line:rgba(215,227,244,.25);--bar:rgba(27,51,88,.14)}
+}
+:root[data-theme="dark"]{--bg:#1b3358;--text:#fff;--muted:#d7e3f4;--title-accent:#e8a33d;--line:rgba(215,227,244,.25);--bar:rgba(27,51,88,.14)}
+*,*::before,*::after{box-sizing:inherit}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font:400 1.125rem/1.55 var(--sans);display:grid;place-items:center;padding:clamp(1.25rem,5vw,4rem);overflow-x:hidden}
+main{width:100%;max-width:66rem;display:grid;gap:3.5rem;align-items:center}
+@media(min-width:56rem){main{grid-template-columns:1.05fr 1fr;gap:5rem}}
+
+.badge{width:4.5rem;height:4.5rem;border-radius:50%;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;margin-bottom:1.5rem}
+.badge svg{width:2.1rem;height:2.1rem}
+.welcome{margin:0;font:700 clamp(1.5rem,4vw,2.1rem)/1.1 var(--serif)}
+h1{margin:.1rem 0 1rem;font:700 clamp(3rem,9vw,5.5rem)/1 var(--serif);letter-spacing:-.02em;color:var(--title-accent)}
+.sub{margin:0 0 2rem;color:var(--muted);max-width:28rem;font-size:1.2rem}
+.by{margin:0 0 .5rem;font-weight:700}
+.names{list-style:none;margin:0 0 2.25rem;padding:0;display:grid;grid-template-columns:repeat(2,max-content);gap:.15rem 3rem;color:var(--muted)}
+.actions{display:flex;flex-wrap:wrap;gap:.75rem}
+.btn{font:700 1rem/1 var(--sans);padding:1rem 1.6rem;border-radius:.6rem;border:1px solid var(--line);background:transparent;color:var(--text);cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:.5rem;transition:transform .2s cubic-bezier(.2,.7,.2,1),background-color .2s,border-color .2s,box-shadow .2s}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn:hover{transform:translateY(-2px);border-color:var(--accent);box-shadow:0 .5rem 1.25rem rgba(0,0,0,.18)}
+.btn:active{transform:scale(.97);box-shadow:none}
+.btn:focus-visible,.deck:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.btn svg{width:1.1rem;height:1.1rem;flex:none}
+.btn .ok{display:none}
+.btn.done{border-color:var(--accent)}
+.btn.done .cp{display:none}
+.btn.done .ok{display:block;animation:tick .35s cubic-bezier(.2,.7,.2,1)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+.deck-wrap{position:relative;isolation:isolate;margin:0 1.6rem 1.6rem 0}
+.ghost{position:absolute;inset:0;z-index:-1;border-radius:.9rem;background:var(--slide);border:1px solid var(--line);transition:transform .45s cubic-bezier(.2,.7,.2,1)}
+.g1{transform:translate(.8rem,.8rem);opacity:.8}
+.g2{transform:translate(1.6rem,1.6rem);opacity:.5;z-index:-2}
+.deck-wrap:hover .g1,.deck-wrap:focus-within .g1{transform:translate(1.1rem,1.1rem) rotate(1deg)}
+.deck-wrap:hover .g2,.deck-wrap:focus-within .g2{transform:translate(2.2rem,2rem) rotate(2deg)}
+.deck{display:block;position:relative;aspect-ratio:16/10;container-type:inline-size;border-radius:.9rem;background:var(--slide);color:var(--slide-ink);border:1px solid var(--line);overflow:hidden;text-decoration:none;box-shadow:0 1rem 2.5rem rgba(0,0,0,.22);transition:box-shadow .3s}
+.deck:hover{box-shadow:0 1.25rem 3rem rgba(0,0,0,.3)}
+.slide{position:absolute;inset:0;padding:8cqw 8cqw 6cqw;display:flex;flex-direction:column;opacity:0;transform:translateX(8%);transition:opacity .6s,transform .7s cubic-bezier(.2,.7,.2,1)}
+.slide.on{opacity:1;transform:none}
+.slide.out{opacity:0;transform:translateX(-8%)}
+.head{display:flex;align-items:center;gap:4cqw}
+.n{flex:none;width:12cqw;height:12cqw;border-radius:50%;background:#e8a33d;color:#1b3358;display:grid;place-items:center;font:700 5.5cqw var(--serif)}
+.slide h2{margin:0;font:700 5.4cqw/1.15 var(--serif)}
+.lines{margin-top:7cqw;display:grid;gap:3cqw}
+.lines i{display:block;height:1.9cqw;border-radius:1cqw;background:var(--bar)}
+.lines i:nth-child(1){width:100%}.lines i:nth-child(2){width:96%}.lines i:nth-child(3){width:99%}.lines i:nth-child(4){width:62%}
+.credit{margin-top:auto;align-self:flex-end;font:400 2.8cqw var(--serif);color:var(--credit)}
+.dots{position:absolute;left:0;right:0;bottom:-1.6rem;display:flex;justify-content:center;gap:.4rem}
+.dots i{width:.4rem;height:.4rem;border-radius:1rem;background:var(--line);transition:width .35s,background-color .35s}
+.dots i.on{width:1.4rem;background:var(--accent)}
+
+@keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes pop{from{opacity:0;transform:scale(.5) rotate(-14deg)}60%{transform:scale(1.08) rotate(3deg)}to{opacity:1;transform:none}}
+@keyframes deckin{from{opacity:0;transform:translateY(28px) rotate(2deg)}to{opacity:1;transform:none}}
+@keyframes tick{from{transform:scale(.4);opacity:0}to{transform:none;opacity:1}}
+.a{animation:rise .75s cubic-bezier(.2,.7,.2,1) both;animation-delay:calc(var(--d,0)*100ms + .1s)}
+.badge.a{animation-name:pop;animation-duration:.9s}
+.deck-wrap.a{animation-name:deckin;animation-duration:1s}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<main>
+  <section>
+    <div class="badge a" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.5C10.3 5.2 7.8 4.5 4 4.5v13c3.8 0 6.3.7 8 2 1.7-1.3 4.2-2 8-2v-13c-3.8 0-6.3.7-8 2z"/><path d="M12 6.5v13"/></svg>
+    </div>
+    <p class="welcome a" style="--d:1">Welcome</p>
+    <h1 class="a" style="--d:2">Vitamin-M</h1>
+    <p class="sub a" style="--d:4">A warm and funny story about family, memory and love</p>
+    <p class="by a" style="--d:5">Presented by</p>
+    <ul class="names">
+      <li class="a" style="--d:6">Jari Abbas</li><li class="a" style="--d:6.5">Vedita</li>
+      <li class="a" style="--d:7">Vivan</li><li class="a" style="--d:7.5">Yashashre</li>
+      <li class="a" style="--d:8">Shubh Sarwan</li><li class="a" style="--d:8.5">Tanishka</li>
+      <li class="a" style="--d:9">Tanvi Selkare</li><li class="a" style="--d:9.5">Tejaswini</li>
+      <li class="a" style="--d:10">Vaishnavi</li><li class="a" style="--d:10.5">Yukti</li>
+    </ul>
+    <div class="actions a" style="--d:11">
+      <a class="btn primary" id="open" href="https://1drv.ms/p/c/9efc3296961961c2/IQCCT9DzWVTsTo8-td_m1jrLASA10v1YocB9Tky8CNMA4b8?e=Vog2Ml" target="_blank" rel="noopener noreferrer">Open presentation</a>
+      <button class="btn" id="copy" type="button">
+        <svg class="cp" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg>
+        <svg class="ok" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>
+        <span id="lbl">Copy link</span>
+      </button>
+      <span class="sr" id="status" role="status" aria-live="polite"></span>
+    </div>
+  </section>
+  <div class="deck-wrap a" style="--d:3">
+    <div class="ghost g1"></div><div class="ghost g2"></div>
+    <a class="deck" id="deck" href="https://1drv.ms/p/c/9efc3296961961c2/IQCCT9DzWVTsTo8-td_m1jrLASA10v1YocB9Tky8CNMA4b8?e=Vog2Ml" target="_blank" rel="noopener noreferrer" aria-label="Open the Vitamin-M presentation on OneDrive"></a>
+    <div class="dots" id="dots" aria-hidden="true"></div>
+  </div>
+</main>
+<script>
+(function(){
+  var S=[["2","A Special Wish","Jari Abbas"],["3","Meet Ravi's Grandpa","Jari Abbas"],["4","Why Grandpa Moved In","Vivan"],["5","A Proud and Independent Man","Vivan"],["6","An Accident in the Garden","Shubh Sarwan"],["8","A Champion at Chess","Tanvi Selkare"]];
+  var deck=document.getElementById('deck'),dots=document.getElementById('dots'),html='',d='';
+  S.forEach(function(s){
+    html+='<div class="slide" aria-hidden="true"><div class="head"><span class="n">'+s[0]+'</span><h2>'+s[1]+'</h2></div><div class="lines"><i></i><i></i><i></i><i></i></div><span class="credit">Made by: '+s[2]+'</span></div>';
+    d+='<i></i>';
+  });
+  deck.innerHTML=html;dots.innerHTML=d;
+  var slides=deck.children,pips=dots.children,i=0,paused=false,reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  slides[0].classList.add('on');pips[0].classList.add('on');
+  function go(n){
+    var cur=slides[i],nxt=slides[n];
+    cur.classList.remove('on');cur.classList.add('out');pips[i].classList.remove('on');
+    nxt.classList.add('on');pips[n].classList.add('on');
+    setTimeout(function(){cur.classList.remove('out')},750);
+    i=n;
+  }
+  if(!reduce){
+    var wrap=deck.parentNode;
+    ['mouseenter','focusin'].forEach(function(e){wrap.addEventListener(e,function(){paused=true})});
+    ['mouseleave','focusout'].forEach(function(e){wrap.addEventListener(e,function(){paused=false})});
+    setInterval(function(){if(!paused&&!document.hidden)go((i+1)%slides.length)},3400);
+  }
+  var url=document.getElementById('open').href,btn=document.getElementById('copy'),lbl=document.getElementById('lbl'),st=document.getElementById('status'),timer;
+  function say(m,ok){lbl.textContent=m;st.textContent=m;btn.classList.toggle('done',!!ok);clearTimeout(timer);timer=setTimeout(function(){lbl.textContent='Copy link';btn.classList.remove('done')},2000)}
+  function fallback(){
+    var t=document.createElement('textarea');t.value=url;t.setAttribute('readonly','');t.style.cssText='position:fixed;opacity:0';document.body.appendChild(t);t.select();
+    var ok=false;try{ok=document.execCommand('copy')}catch(e){}
+    document.body.removeChild(t);say(ok?'Link copied':'Copy failed. Select the link manually.',ok);
+  }
+  btn.addEventListener('click',function(){
+    if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(url).then(function(){say('Link copied',true)},fallback)}else{fallback()}
+  });
+})();
+</script>
+</body>
+</html>
